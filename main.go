@@ -29,7 +29,7 @@ func notMultipleThree(nums <-chan int) <-chan int {
 	go func() {
 		defer close(output)
 		for v := range nums {
-			fmt.Println("Получен элемент в notMultipleThree")
+			fmt.Println("Получен элемент в notMultipleThree ")
 			if v%3 != 0 && v != 0 {
 				output <- v
 				fmt.Println("Проверен элемент в notMultipleThree")
