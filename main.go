@@ -98,7 +98,7 @@ func main() {
 	for i := 0; i < col; i++ {
 		var num int
 		fmt.Printf("Введите %d число: ", i+1)
-		_, err := fmt.Scan(&num)
+		_, err = fmt.Scan(&num)
 		if err != nil {
 			fmt.Println(err)
 		} else {
