@@ -12,9 +12,11 @@ const flushInterval = 2 * time.Second
 func notNegativeFunc(dataSourceInt []int) <-chan int {
 	output := make(chan int)
 	go func() {
+		fmt.Println("Получены данные notNegativeFunc")
 		for _, v := range dataSourceInt {
 			if v > 0 {
 				output <- v
+				fmt.Println("Проверен элемент из notNegativeFunc")
 			}
 		}
 		close(output)
@@ -27,8 +29,10 @@ func notMultipleThree(nums <-chan int) <-chan int {
 	go func() {
 		defer close(output)
 		for v := range nums {
+			fmt.Println("Получен элемент в notMultipleThree")
 			if v%3 != 0 && v != 0 {
 				output <- v
+				fmt.Println("Проверен элемент в notMultipleThree")
 			}
 		}
 	}()
@@ -50,7 +54,9 @@ func bufferStage(input <-chan int) <-chan int {
 			case v, ok := <-input:
 				if ok {
 					buffer = append(buffer, v)
+					fmt.Println("Элемент добавлен в буфер:", v)
 					if len(buffer) == bufferSize {
+						fmt.Println("Буфер заполнен. Отправка данных...")
 						for _, item := range buffer {
 							output <- item
 						}
@@ -58,6 +64,7 @@ func bufferStage(input <-chan int) <-chan int {
 					}
 				} else {
 					// Закрытие входного канала, опустошаем буфер
+					fmt.Println("Входной канал закрыт. Опустошение буфера...")
 					for _, item := range buffer {
 						output <- item
 					}
@@ -66,6 +73,7 @@ func bufferStage(input <-chan int) <-chan int {
 			case <-ticker.C:
 				// Таймер истёк, опустошаем буфер
 				if len(buffer) > 0 {
+					fmt.Println("Интервал истёк. Отправка данных из буфера...")
 					for _, item := range buffer {
 						output <- item
 					}
